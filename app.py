@@ -84,22 +84,22 @@ def create_sql_db():
     df.columns = list_r
     list_dates_str = []
     for i in range(df.shape[0]):
-    if type(df['OTD_[h:m:s]'].iloc[i]) == datetime.datetime:
-        list_dates_str.append(df['OTD_[h:m:s]'].iloc[i].strftime("%H:%M:%S"))
-    elif type(df['OTD_[h:m:s]'].iloc[i]) == datetime.time:
-        list_dates_str.append(df['OTD_[h:m:s]'].iloc[i].strftime("%H:%M:%S"))
-    else:
-        list_dates_str.append(None)
+        if type(df['OTD_[h:m:s]'].iloc[i]) == datetime.datetime:
+            list_dates_str.append(df['OTD_[h:m:s]'].iloc[i].strftime("%H:%M:%S"))
+        elif type(df['OTD_[h:m:s]'].iloc[i]) == datetime.time:
+            list_dates_str.append(df['OTD_[h:m:s]'].iloc[i].strftime("%H:%M:%S"))
+        else:
+            list_dates_str.append(None)
     df['OTD_[h:m:s]'] = list_dates_str
     df['OTD_[h:m:s]'] = pd.to_datetime(df['OTD_[h:m:s]'])
     column_to_data_map = {}
     for i in df.columns:
-    val = ""
-    if df[i].dtype == 'O':
-        val = String
-    else:
-        val = Float
-    column_to_data_map[i] = val
+        val = ""
+        if df[i].dtype == 'O':
+            val = String
+        else:
+            val = Float
+        column_to_data_map[i] = val
     column_to_data_map['OTD_[h:m:s]'] = DateTime
     df.to_sql('insights', engine, if_exists='replace', index=False, dtype=column_to_data_map)
 
